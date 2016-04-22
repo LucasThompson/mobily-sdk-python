@@ -16,7 +16,7 @@ class TestMobilyUnicode(unittest.TestCase):
         encoder = MobilyUnicodeEncoder('π')
         self.assertEqual('03C0', encoder.encode())
 
-    def test_emoji_characters_for_fun(self):
+    def test_emoji_characters(self):
         grin_face = '😁'
         encoder = MobilyUnicodeEncoder(grin_face)
         self.assertEqual('D83DDE01', encoder.encode())
