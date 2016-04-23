@@ -2,7 +2,7 @@
 import unittest
 from mobily.utilities import MobilyApiRequest
 from mobily.utilities import MobilyApiResponse
-from mobily.account import MobilyAuth
+from mobily.utilities import MobilyAuth
 
 
 class TestMobilyApiRequest(unittest.TestCase):

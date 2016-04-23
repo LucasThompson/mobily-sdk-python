@@ -22,6 +22,12 @@ class MobilyUnicodeConverter:
             self.message = unicode(self.message, 'utf-8')
 
 
+class MobilyAuth:
+    def __init__(self, mobile_number, password):
+        self.mobile_number = mobile_number
+        self.password = password
+
+
 class MobilyApiRequest:
     def __init__(self, auth, api_host='www.mobily.ws', api_end_point='/api/xml/'):
         self.api_host = api_host
@@ -56,6 +62,8 @@ class MobilyApiRequest:
         is_error = len(list(error_element)) > 0
         data_or_error = 'Error' if is_error else 'Data'
         response_data = MobilyApiRequest._element_to_dict(tree.find(data_or_error))
+        if is_error:
+            raise MobilyApiError(response_data['ErrorCode'], response_data['MessageAr'], response_data['MessageEn'])
         for key, value in response_data.iteritems():
             response.add_data(key, value)
         return response
@@ -94,9 +102,6 @@ class MobilyApiResponse:
 
     def add_data(self, key, value):
         self.data.update({key: value})
-
-    def is_error(self):
-        return self.response_status == 'fail'
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
