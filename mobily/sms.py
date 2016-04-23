@@ -1,10 +1,15 @@
-class MobilySMS:
-    def __init__(self):
-        pass
+from mobily.utilities import MobilyApiRequest
 
-    def can_send(self):
+
+class MobilySMS:
+    def __init__(self, auth):
+        self.auth = auth
+
+    @staticmethod
+    def can_send():
         # send status api method wrapper
-        pass
+        request = MobilyApiRequest()
+        request.add_parameter('Method', 'sendStatus')
 
     def send(self):
         # send sms method wrapper
