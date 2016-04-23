@@ -2,7 +2,7 @@ from mobily.utilities import MobilyApiRequest
 
 
 class MobilySMS:
-    def __init__(self, auth, sender, msg):
+    def __init__(self, auth):
         self.auth = auth
         self.numbers = []
         self.sender = ''
