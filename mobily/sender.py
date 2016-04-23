@@ -1,4 +1,4 @@
-from mobily.utilities import MobilyApiRequest
+from mobily.utilities import MobilyApiXmlRequest
 
 
 class MobilySender:
@@ -15,8 +15,8 @@ class MobilySender:
         pass
 
     def request_alphabetical_license(self, sender):
-        request = MobilyApiRequest(self.auth)
-        request.add_parameter('Method', 'addAlphaSender')
+        request = MobilyApiXmlRequest(self.auth)
+        request.set_api_method('addAlphaSender')
         request.add_parameter('Sender', sender)
         request.send()
 
