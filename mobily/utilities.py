@@ -73,6 +73,27 @@ class MobilyApiRequest:
         return self._parse_response(data)
 
 
+class MobilyApiJsonRequest(MobilyApiRequest):
+    def __init__(self, auth=None):
+        MobilyApiRequest.__init__(self, api_end_point='/api/json/')
+        self.content_type = 'json'
+        self.auth = auth
+        self.json_dict = {'Data': {}}
+
+    def add_auth(self, auth):
+        if isinstance(auth, MobilyAuth):
+            self.json_dict['Data'].update({'Auth': {'mobile': auth.mobile_number, 'password': auth.password}})
+
+    def set_api_method(self, method_name):
+        self.json_dict['Data'].update({'Method': method_name})
+
+    def get_request_data(self):
+        self.add_auth(self.auth)
+        if len(self.params) > 0:
+            self.json_dict['Data'].update({'Params': self.params})
+        return json.dumps(self.json_dict)
+
+
 class MobilyApiXmlRequest(MobilyApiRequest):
     def __init__(self, auth=None):
         MobilyApiRequest.__init__(self, api_end_point='/api/xml/')
@@ -115,27 +136,6 @@ class MobilyApiXmlRequest(MobilyApiRequest):
             else:
                 data.update({child.tag: child.text})
         return data
-
-
-class MobilyApiJsonRequest(MobilyApiRequest):
-    def __init__(self, auth=None):
-        MobilyApiRequest.__init__(self, api_end_point='/api/json/')
-        self.content_type = 'json'
-        self.auth = auth
-        self.json_dict = {'Data': {}}
-
-    def add_auth(self, auth):
-        if isinstance(auth, MobilyAuth):
-            self.json_dict['Data'].update({'Auth': {'mobile': auth.mobile_number, 'password': auth.password}})
-
-    def set_api_method(self, method_name):
-        self.json_dict['Data'].update({'Method': method_name})
-
-    def get_request_data(self):
-        self.add_auth(self.auth)
-        if len(self.params) > 0:
-            self.json_dict['Data'].update({'Params': self.params})
-        return json.dumps(self.json_dict)
 
 
 class MobilyApiError(Exception):
