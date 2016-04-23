@@ -19,7 +19,7 @@ class MobilyUnicodeConverter:
 
     def _ensure_unicode(self):
         if sys.version_info < (3,) and type(self.message) is not unicode:
-                self.message = unicode(self.message, 'utf-8')
+            self.message = unicode(self.message, 'utf-8')
 
 
 class MobilyApiRequest:
@@ -69,6 +69,21 @@ class MobilyApiRequest:
             else:
                 data.update({child.tag: child.text})
         return data
+
+
+class MobilyApiError(Exception):
+    """Exception raised when an MobilyApiRequest indicates the request failed.
+
+    Attributes:
+        code         -- the error code returned from the API
+        msg_arabic   -- explanation of the error in Arabic
+        msg_english  -- explanation of the error in English
+    """
+
+    def __init__(self, code, msg_arabic, msg_english):
+        self.code = code
+        self.msg_arabic = msg_arabic
+        self.msg_english = msg_english
 
 
 class MobilyApiResponse:
