@@ -19,16 +19,22 @@ class MobilyUnicodeConverter:
 
     def _ensure_unicode(self):
         if sys.version_info < (3,) and type(self.message) is not unicode:
-                self.message = unicode(self.message, 'utf-8')
+            self.message = unicode(self.message, 'utf-8')
+
+
+class MobilyAuth:
+    def __init__(self, mobile_number, password):
+        self.mobile_number = mobile_number
+        self.password = password
 
 
 class MobilyApiRequest:
-    def __init__(self, username, password, api_host='www.mobily.ws', api_end_point='/api/xml/'):
+    def __init__(self, auth, api_host='www.mobily.ws', api_end_point='/api/xml/'):
         self.api_host = api_host
         self.api_end_point = api_end_point
-        self.auth = (username, password)
+        self.auth = auth
         self.params = ET.Element('MobilySMS')
-        ET.SubElement(self.params, 'Auth', attrib={'mobile': username, 'password': password})
+        ET.SubElement(self.params, 'Auth', attrib={'mobile': auth.mobile_number, 'password': auth.password})
 
     def add_parameter(self, key, value):
         ET.SubElement(self.params, key).text = value
@@ -56,6 +62,8 @@ class MobilyApiRequest:
         is_error = len(list(error_element)) > 0
         data_or_error = 'Error' if is_error else 'Data'
         response_data = MobilyApiRequest._element_to_dict(tree.find(data_or_error))
+        if is_error:
+            raise MobilyApiError(response_data['ErrorCode'], response_data['MessageAr'], response_data['MessageEn'])
         for key, value in response_data.iteritems():
             response.add_data(key, value)
         return response
@@ -71,6 +79,21 @@ class MobilyApiRequest:
         return data
 
 
+class MobilyApiError(Exception):
+    """Exception raised when an MobilyApiRequest indicates the request failed.
+
+    Attributes:
+        code         -- the error code returned from the API
+        msg_arabic   -- explanation of the error in Arabic
+        msg_english  -- explanation of the error in English
+    """
+
+    def __init__(self, code, msg_arabic, msg_english):
+        self.code = code
+        self.msg_arabic = msg_arabic
+        self.msg_english = msg_english
+
+
 class MobilyApiResponse:
     def __init__(self, status, response_status):
         self.status = status
@@ -79,9 +102,6 @@ class MobilyApiResponse:
 
     def add_data(self, key, value):
         self.data.update({key: value})
-
-    def is_error(self):
-        return self.response_status == 'fail'
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

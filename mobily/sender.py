@@ -1,6 +1,9 @@
+from mobily.utilities import MobilyApiRequest
+
+
 class MobilySender:
-    def __init__(self):
-        pass
+    def __init__(self, auth):
+        self.auth = auth
 
     def request_mobile_number_license(self):
         pass
@@ -11,8 +14,11 @@ class MobilySender:
     def is_mobile_number_license_active(self):
         pass
 
-    def request_alphabetical_license(self):
-        pass
+    def request_alphabetical_license(self, sender):
+        request = MobilyApiRequest(self.auth)
+        request.add_parameter('Method', 'addAlphaSender')
+        request.add_parameter('Sender', sender)
+        request.send()
 
     def is_alphabetical_license_active(self):
         pass
