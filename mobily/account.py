@@ -13,3 +13,9 @@ class MobilyAccount:
     def check_balance(self):
         # balance api method wrapper
         pass
+
+
+class MobilyAuth:
+    def __init__(self, mobile_number, password):
+        self.mobile_number = mobile_number
+        self.password = password
