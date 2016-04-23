@@ -23,12 +23,12 @@ class MobilyUnicodeConverter:
 
 
 class MobilyApiRequest:
-    def __init__(self, username, password, api_host='www.mobily.ws', api_end_point='/api/xml/'):
+    def __init__(self, auth, api_host='www.mobily.ws', api_end_point='/api/xml/'):
         self.api_host = api_host
         self.api_end_point = api_end_point
-        self.auth = (username, password)
+        self.auth = auth
         self.params = ET.Element('MobilySMS')
-        ET.SubElement(self.params, 'Auth', attrib={'mobile': username, 'password': password})
+        ET.SubElement(self.params, 'Auth', attrib={'mobile': auth.mobile_number, 'password': auth.password})
 
     def add_parameter(self, key, value):
         ET.SubElement(self.params, key).text = value
