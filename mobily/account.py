@@ -15,9 +15,9 @@ class MobilyAccount(object):
     def forgot_password(self, send_to_email=True):
         # forgotPassword api method wrapper
         request_handler = MobilyApiJsonRequestHandler(self.auth)
-        type = 2 if send_to_email else 1
+        request_type = 2 if send_to_email else 1
         request_handler.set_api_method('forgetPassword')
-        request_handler.add_parameter('type', type)
+        request_handler.add_parameter('type', request_type)
         return request_handler.handle()
 
     def check_balance(self):
