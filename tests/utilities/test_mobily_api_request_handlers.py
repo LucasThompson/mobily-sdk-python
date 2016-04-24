@@ -9,27 +9,24 @@ from mobily.utilities import MobilyApiError
 
 
 class TestMobilyApiRequestHandlersQueryBuilding(unittest.TestCase):
-    def setUp(self):
-        self.valid_auth = MobilyAuth('66902258638', 'ThaiSim2016')
 
     def test_xml_building(self):
         expected_xml = '<MobilySMS>'
-        expected_xml += '<Auth mobile="66902258638" password="ThaiSim2016" />'
+        expected_xml += '<Auth mobile="test" password="test" />'
         expected_xml += '<Method>balance</Method>'
         expected_xml += '</MobilySMS>'
-        request = MobilyApiXmlRequestHandler(self.valid_auth)
+        request = MobilyApiXmlRequestHandler(MobilyAuth('test', 'test'))
         request.set_api_method('balance')
         self.assertEqual(expected_xml, request.get_request_data())
 
     def test_url_building(self):
-        expected_url = 'mobile={0}&password={1}'.format(self.valid_auth.mobile_number, self.valid_auth.password)
-        request = MobilyApiHttpRequestHandler(self.valid_auth)
+        expected_url = 'mobile=test&password=test'
+        request = MobilyApiHttpRequestHandler(MobilyAuth('test', 'test'))
         self.assertEqual(expected_url, request.get_request_data())
 
     def test_json_building(self):
-        expected_json = '{{"Data": {{"Method": "balance", "Auth": {{"mobile": "{0}", "password": "{1}"}}}}}}'.format(
-            self.valid_auth.mobile_number, self.valid_auth.password)
-        request = MobilyApiJsonRequestHandler(self.valid_auth)
+        expected_json = '{"Data": {"Method": "balance", "Auth": {"mobile": "test", "password": "test"}}}'
+        request = MobilyApiJsonRequestHandler(MobilyAuth('test', 'test'))
         request.set_api_method('balance')
         self.assertEqual(expected_json, request.get_request_data())
 

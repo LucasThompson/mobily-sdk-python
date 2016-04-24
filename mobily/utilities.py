@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 import json
 
 
-class MobilyUnicodeConverter:
+class MobilyUnicodeConverter(object):
     def __init__(self, message):
         self.message = u(message)
 
@@ -26,13 +26,13 @@ def u(s):
         return s
 
 
-class MobilyAuth:
+class MobilyAuth(object):
     def __init__(self, mobile_number, password):
         self.mobile_number = mobile_number
         self.password = password
 
 
-class MobilyApiResponse:
+class MobilyApiResponse(object):
     def __init__(self, status, response_status):
         self.status = status
         self.response_status = response_status.lower()
@@ -40,6 +40,9 @@ class MobilyApiResponse:
 
     def add_data(self, key, value):
         self.data.update({u(key): u(value)})
+
+    def get(self, key):
+        return self.data[key] if key in self.data else None
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -61,7 +64,7 @@ class MobilyApiError(Exception):
         self.msg_english = msg_english
 
 
-class MobilyApiRequest:
+class MobilyApiRequest(object):
     def __init__(self, api_host='www.mobily.ws', api_end_point='/api/'):
         self.api_host = api_host
         self.api_end_point = api_end_point
@@ -76,7 +79,7 @@ class MobilyApiRequest:
         return data
 
 
-class MobilyApiHttpRequestHandler:
+class MobilyApiHttpRequestHandler(object):
     def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/')):
         self.request = request
         self.auth = auth
@@ -95,7 +98,8 @@ class MobilyApiHttpRequestHandler:
         self.request.api_end_point = '/api/{0}.php'.format(method_name)
 
     def add_parameter(self, key, value):
-        self.params.update({key: value})
+        if value is not None:
+            self.params.update({key: value})
 
     def get_request_data(self):
         return urllib.urlencode(self.params)
@@ -111,7 +115,7 @@ class MobilyApiHttpRequestHandler:
 
 class MobilyApiJsonRequestHandler(MobilyApiHttpRequestHandler):
     def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/json/')):
-        MobilyApiHttpRequestHandler.__init__(self, request=request)
+        super(MobilyApiJsonRequestHandler, self).__init__(request=request)
         self.content_type = 'json'
         self.auth = auth
         self.json_dict = {'Data': {}}
@@ -143,7 +147,7 @@ class MobilyApiJsonRequestHandler(MobilyApiHttpRequestHandler):
 
 class MobilyApiXmlRequestHandler(MobilyApiHttpRequestHandler):
     def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/xml/')):
-        MobilyApiHttpRequestHandler.__init__(self, request=request)
+        super(MobilyApiXmlRequestHandler, self).__init__(request=request)
         self.content_type = 'xml'
         self.params = ET.Element('MobilySMS')
         self.add_auth(auth)
@@ -156,7 +160,8 @@ class MobilyApiXmlRequestHandler(MobilyApiHttpRequestHandler):
         self.add_parameter('Method', method_name)
 
     def add_parameter(self, key, value):
-        ET.SubElement(self.params, key).text = value
+        if value is not None:
+            ET.SubElement(self.params, key).text = value
 
     def get_request_data(self):
         return ET.tostring(self.params, 'utf-8')

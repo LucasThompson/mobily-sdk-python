@@ -1,7 +1,7 @@
 from mobily.utilities import MobilyApiXmlRequestHandler
 
 
-class MobilySender:
+class MobilySender(object):
     def __init__(self, auth):
         self.auth = auth
 
@@ -15,10 +15,10 @@ class MobilySender:
         pass
 
     def request_alphabetical_license(self, sender):
-        request = MobilyApiXmlRequestHandler(self.auth)
-        request.set_api_method('addAlphaSender')
-        request.add_parameter('Sender', sender)
-        request.handle()
+        request_handler = MobilyApiXmlRequestHandler(self.auth)
+        request_handler.set_api_method('addAlphaSender')
+        request_handler.add_parameter('Sender', sender)
+        request_handler.handle()
 
     def is_alphabetical_license_active(self):
         pass

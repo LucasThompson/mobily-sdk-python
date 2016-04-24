@@ -1,4 +1,4 @@
-class MobilyAccount:
+class MobilyAccount(object):
     def __init__(self):
         pass
 
