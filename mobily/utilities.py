@@ -20,7 +20,7 @@ class MobilyUnicodeConverter(object):
 
 
 def u(s):
-    if sys.version_info < (3,) and type(s) is not unicode:
+    if sys.version_info < (3,) and type(s) is str:
         return unicode(s, 'utf-8')
     else:
         return s
