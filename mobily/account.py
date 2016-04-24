@@ -1,15 +1,27 @@
+from mobily.utilities import MobilyApiJsonRequestHandler
+
+
 class MobilyAccount(object):
-    def __init__(self):
-        pass
+    def __init__(self, auth):
+        self.auth = auth
 
-    def change_password(self):
+    def change_password(self, new_password):
         # changePassword api method wrapper
-        pass
+        request_handler = MobilyApiJsonRequestHandler(self.auth)
+        request_handler.set_api_method('changePassword')
+        request_handler.add_parameter('newPassword', new_password)
+        return request_handler.handle()
 
-    def forgot_password(self):
+    def forgot_password(self, send_to_email=True):
         # forgotPassword api method wrapper
-        pass
+        request_handler = MobilyApiJsonRequestHandler(self.auth)
+        type = 2 if send_to_email else 1
+        request_handler.set_api_method('forgetPassword')
+        request_handler.add_parameter('type', type)
+        return request_handler.handle()
 
     def check_balance(self):
         # balance api method wrapper
-        pass
+        request_handler = MobilyApiJsonRequestHandler(self.auth)
+        request_handler.set_api_method('balance')
+        return request_handler.handle()
