@@ -13,21 +13,52 @@ import json
 
 class MobilyUnicodeConverter:
     def __init__(self, message):
-        self.message = message
-        self._ensure_unicode()
+        self.message = u(message)
 
     def convert(self):
         return ''.join(['{:04x}'.format(ord(byte)).upper() for byte in self.message])
 
-    def _ensure_unicode(self):
-        if sys.version_info < (3,) and type(self.message) is not unicode:
-            self.message = unicode(self.message, 'utf-8')
+
+def u(s):
+    if sys.version_info < (3,) and type(s) is not unicode:
+        return unicode(s, 'utf-8')
+    else:
+        return s
 
 
 class MobilyAuth:
     def __init__(self, mobile_number, password):
         self.mobile_number = mobile_number
         self.password = password
+
+
+class MobilyApiResponse:
+    def __init__(self, status, response_status):
+        self.status = status
+        self.response_status = response_status.lower()
+        self.data = {}
+
+    def add_data(self, key, value):
+        self.data.update({u(key): u(value)})
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+
+class MobilyApiError(Exception):
+    """Exception raised when an a RequestHandler indicates the request failed.
+
+    Attributes:
+        code         -- the error code returned from the API
+        msg_arabic   -- explanation of the error in Arabic
+        msg_english  -- explanation of the error in English
+    """
+
+    def __init__(self, code, msg_arabic, msg_english):
+        super(MobilyApiError, self).__init__(msg_english, )
+        self.code = code
+        self.msg_arabic = msg_arabic
+        self.msg_english = msg_english
 
 
 class MobilyApiRequest:
@@ -98,6 +129,17 @@ class MobilyApiJsonRequestHandler(MobilyApiHttpRequestHandler):
             self.json_dict['Data'].update({'Params': self.params})
         return json.dumps(self.json_dict)
 
+    def _parse_response(self, data):
+        json_dict = json.loads(data, encoding='utf-8')
+        is_error = json_dict['Error'] is not None
+        if is_error:
+            error = json_dict['Error']
+            raise MobilyApiError(error['ErrorCode'], error['MessageAr'], error['MessageEn'])
+        response = MobilyApiResponse(json_dict['status'], json_dict['ResponseStatus'])
+        for key, value in json_dict['Data'].iteritems():
+            response.add_data(key, value)
+        return response
+
 
 class MobilyApiXmlRequestHandler(MobilyApiHttpRequestHandler):
     def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/xml/')):
@@ -141,32 +183,3 @@ class MobilyApiXmlRequestHandler(MobilyApiHttpRequestHandler):
             else:
                 data.update({child.tag: child.text})
         return data
-
-
-class MobilyApiError(Exception):
-    """Exception raised when an a RequestHandler indicates the request failed.
-
-    Attributes:
-        code         -- the error code returned from the API
-        msg_arabic   -- explanation of the error in Arabic
-        msg_english  -- explanation of the error in English
-    """
-
-    def __init__(self, code, msg_arabic, msg_english):
-        super(MobilyApiError, self).__init__(msg_english, )
-        self.code = code
-        self.msg_arabic = msg_arabic
-        self.msg_english = msg_english
-
-
-class MobilyApiResponse:
-    def __init__(self, status, response_status):
-        self.status = status
-        self.response_status = response_status.lower()
-        self.data = {}
-
-    def add_data(self, key, value):
-        self.data.update({key: value})
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
