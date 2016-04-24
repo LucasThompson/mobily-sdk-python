@@ -31,9 +31,23 @@ class MobilyAuth:
 
 
 class MobilyApiRequest:
-    def __init__(self, auth=None, api_host='www.mobily.ws', api_end_point='/api/'):
+    def __init__(self, api_host='www.mobily.ws', api_end_point='/api/'):
         self.api_host = api_host
         self.api_end_point = api_end_point
+
+    def send(self, request_data, content_type):
+        headers = {'Content-type': 'application/{0}; charset=utf-8'.format(content_type)}
+        conn = httplib.HTTPConnection(self.api_host)
+        conn.request('POST', self.api_end_point, request_data, headers)
+        response = conn.getresponse()
+        data = response.read()
+        conn.close()
+        return data
+
+
+class MobilyApiHttpRequestHandler:
+    def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/')):
+        self.request = request
         self.auth = auth
         self.content_type = 'x-www-form-urlencoded'
         self.params = {}
@@ -47,7 +61,7 @@ class MobilyApiRequest:
             self.add_parameter('password', auth.password)
 
     def set_api_method(self, method_name):
-        self.api_end_point = '/api/{0}.php'.format(method_name)
+        self.request.api_end_point = '/api/{0}.php'.format(method_name)
 
     def add_parameter(self, key, value):
         self.params.update({key: value})
@@ -55,27 +69,18 @@ class MobilyApiRequest:
     def get_request_data(self):
         return urllib.urlencode(self.params)
 
-    def send(self):
-        return self._post_request()
+    def handle(self):
+        return self._parse_response(self.request.send(self.get_request_data(), self.content_type))
 
     def _parse_response(self, data):
         if callable(self.error_predicate) and self.error_predicate(data):
             raise self.error
         return data
 
-    def _post_request(self):
-        headers = {'Content-type': 'application/{0}; charset=utf-8'.format(self.content_type)}
-        conn = httplib.HTTPConnection(self.api_host)
-        conn.request('POST', self.api_end_point, self.get_request_data(), headers)
-        response = conn.getresponse()
-        data = response.read()
-        conn.close()
-        return self._parse_response(data)
 
-
-class MobilyApiJsonRequest(MobilyApiRequest):
-    def __init__(self, auth=None):
-        MobilyApiRequest.__init__(self, api_end_point='/api/json/')
+class MobilyApiJsonRequestHandler(MobilyApiHttpRequestHandler):
+    def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/json/')):
+        MobilyApiHttpRequestHandler.__init__(self, request=request)
         self.content_type = 'json'
         self.auth = auth
         self.json_dict = {'Data': {}}
@@ -94,9 +99,9 @@ class MobilyApiJsonRequest(MobilyApiRequest):
         return json.dumps(self.json_dict)
 
 
-class MobilyApiXmlRequest(MobilyApiRequest):
-    def __init__(self, auth=None):
-        MobilyApiRequest.__init__(self, api_end_point='/api/xml/')
+class MobilyApiXmlRequestHandler(MobilyApiHttpRequestHandler):
+    def __init__(self, auth=None, request=MobilyApiRequest(api_end_point='/api/xml/')):
+        MobilyApiHttpRequestHandler.__init__(self, request=request)
         self.content_type = 'xml'
         self.params = ET.Element('MobilySMS')
         self.add_auth(auth)
@@ -132,14 +137,14 @@ class MobilyApiXmlRequest(MobilyApiRequest):
         data = {}
         for child in element:
             if len(list(child)) > 0:
-                data.update({child.tag: MobilyApiXmlRequest._element_to_dict(child)})
+                data.update({child.tag: MobilyApiXmlRequestHandler._element_to_dict(child)})
             else:
                 data.update({child.tag: child.text})
         return data
 
 
 class MobilyApiError(Exception):
-    """Exception raised when an MobilyApiRequest indicates the request failed.
+    """Exception raised when an a RequestHandler indicates the request failed.
 
     Attributes:
         code         -- the error code returned from the API

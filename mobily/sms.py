@@ -1,4 +1,4 @@
-from mobily.utilities import MobilyApiRequest
+from mobily.utilities import MobilyApiXmlRequestHandler
 
 
 class MobilySMS:
@@ -22,8 +22,8 @@ class MobilySMS:
     @staticmethod
     def can_send():
         # send status api method wrapper
-        request = MobilyApiRequest()
-        request.add_parameter('Method', 'sendStatus')
+        request = MobilyApiXmlRequestHandler()
+        request.set_api_method('sendStatus')  # did i want HTTP?
 
     def delete(self):
         if self.delete_key is None:
