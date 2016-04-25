@@ -9,12 +9,10 @@ import httplib
 import json
 
 
-class MobilyUnicodeConverter(object):
-    def __init__(self, message):
-        self.message = u(message)
-
-    def convert(self):
-        return ''.join(['{:04x}'.format(ord(byte)).upper() for byte in self.message])
+class MobilyApiUnicodeConverter(object):
+    @staticmethod
+    def convert(message):
+        return ''.join(['{:04x}'.format(ord(byte)).upper() for byte in u(message)])
 
 
 def u(s):

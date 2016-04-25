@@ -1,6 +1,6 @@
 from mobily.utilities import MobilyApiJsonRequestHandler
 from mobily.utilities import MobilyApiError
-from mobily.utilities import MobilyUnicodeConverter
+from mobily.utilities import MobilyApiUnicodeConverter
 
 
 class MobilySMS(object):
@@ -53,7 +53,7 @@ class MobilySMS(object):
     def _prepare_to_send(self):
         self.request_handler.set_api_method('msgSend')
         self.request_handler.add_parameter('sender', self.sender)
-        self.request_handler.add_parameter('msg', MobilyUnicodeConverter(self.msg).convert())
+        self.request_handler.add_parameter('msg', MobilyApiUnicodeConverter.convert(self.msg))
         self.request_handler.add_parameter('numbers', self.get_numbers_as_csv())
         self.request_handler.add_parameter('dateSend', self.date_send)
         self.request_handler.add_parameter('timeSend', self.time_send)
@@ -91,4 +91,4 @@ class MobilyFormattedSMS(MobilySMS):
 
     def _prepare_to_send(self):
         super(MobilyFormattedSMS, self)._prepare_to_send()
-        self.request_handler.add_parameter('msgKey', MobilyUnicodeConverter(self.generate_msg_key()).convert())
+        self.request_handler.add_parameter('msgKey', MobilyApiUnicodeConverter.convert(self.generate_msg_key()))
