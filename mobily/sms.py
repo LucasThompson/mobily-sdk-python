@@ -1,3 +1,12 @@
+"""
+Copyright (c) 2016 Mobily.ws
+Code by Lucas Thompson
+
+Classes wrapping the Mobily API methods for sending SMS messages
+
+- MobilySMS allows for sending, deleting and scheduling SMS messages
+- MobilyFormattedSMS provides additional functionality for sending bulk messages
+"""
 from mobily.utilities import MobilyApiJsonRequestHandler
 from mobily.utilities import MobilyApiError
 from mobily.utilities import MobilyApiUnicodeConverter

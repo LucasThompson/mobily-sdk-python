@@ -1,3 +1,10 @@
+"""
+Copyright (c) 2016 Mobily.ws
+Code by Lucas Thompson
+
+Class wrapping the Mobily API methods for adding senders
+
+"""
 from mobily.utilities import MobilyApiJsonRequestHandler, MobilyApiError
 
 

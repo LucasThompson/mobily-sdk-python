@@ -1,3 +1,10 @@
+"""
+Copyright (c) 2016 Mobily.ws
+Code by Lucas Thompson
+
+Class wrapping the Mobily API methods for managing account details
+
+"""
 from mobily.utilities import MobilyApiJsonRequestHandler
 
 
