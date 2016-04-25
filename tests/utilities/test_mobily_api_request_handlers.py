@@ -1,32 +1,17 @@
 # -*- coding: utf-8 -*-
 import unittest
-from mobily.utilities import MobilyApiXmlRequestHandler, MobilyApiRequest
-from mobily.utilities import MobilyApiHttpRequestHandler
+from mobily.utilities import MobilyApiRequest
 from mobily.utilities import MobilyApiJsonRequestHandler
-from mobily.utilities import MobilyAuth
+from mobily.utilities import MobilyApiAuth
 from mobily.utilities import MobilyApiResponse
 from mobily.utilities import MobilyApiError
 
 
 class TestMobilyApiRequestHandlersQueryBuilding(unittest.TestCase):
 
-    def test_xml_building(self):
-        expected_xml = '<MobilySMS>'
-        expected_xml += '<Auth mobile="test" password="test" />'
-        expected_xml += '<Method>balance</Method>'
-        expected_xml += '</MobilySMS>'
-        request = MobilyApiXmlRequestHandler(MobilyAuth('test', 'test'))
-        request.set_api_method('balance')
-        self.assertEqual(expected_xml, request.get_request_data())
-
-    def test_url_building(self):
-        expected_url = 'mobile=test&password=test'
-        request = MobilyApiHttpRequestHandler(MobilyAuth('test', 'test'))
-        self.assertEqual(expected_url, request.get_request_data())
-
     def test_json_building(self):
         expected_json = '{"Data": {"Method": "balance", "Auth": {"mobile": "test", "password": "test"}}}'
-        request = MobilyApiJsonRequestHandler(MobilyAuth('test', 'test'))
+        request = MobilyApiJsonRequestHandler(MobilyApiAuth('test', 'test'))
         request.set_api_method('balance')
         self.assertEqual(expected_json, request.get_request_data())
 
