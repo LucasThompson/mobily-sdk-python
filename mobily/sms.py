@@ -4,18 +4,21 @@ from mobily.utilities import MobilyApiUnicodeConverter
 
 
 class MobilySMS(object):
-    def __init__(self, auth, numbers, sender, msg, date_send=0, time_send=0, delete_key=None, msg_id=None,
-                 domain_name=None, application_type=24):
-        self.auth = auth
+    def __init__(self, auth, numbers=None, sender='', msg='', delete_key=None, msg_id=None,
+                 domain_name=None, application_type='24'):
         self.numbers = numbers
+        if numbers is None:
+            self.numbers = []
+        self.auth = auth
         self.sender = sender
         self.msg = msg
-        self.date_send = date_send
-        self.time_send = time_send
+        self.date_send = 0
+        self.time_send = 0
         self.delete_key = delete_key
         self.msg_id = msg_id
         self.domain_name = domain_name
         self.application_type = application_type
+        self.api_method_name = 'msgSend'
         self.request_handler = MobilyApiJsonRequestHandler(self.auth)
 
     def add_number(self, number):
@@ -50,8 +53,12 @@ class MobilySMS(object):
         request_handler.add_parameter('deleteKey', self.delete_key)
         return request_handler.handle()
 
+    def schedule_to_send_on(self, day, month, year, hour=0, minute=0, sec=0):
+        self.time_send = '{:02d}:{:02d}:{:02d}'.format(hour, minute, sec)
+        self.date_send = '{:02d}/{:02d}/{:04d}'.format(month, day, year)
+
     def _prepare_to_send(self):
-        self.request_handler.set_api_method('msgSend')
+        self.request_handler.set_api_method(self.api_method_name)
         self.request_handler.add_parameter('sender', self.sender)
         self.request_handler.add_parameter('msg', MobilyApiUnicodeConverter.convert(self.msg))
         self.request_handler.add_parameter('numbers', self.get_numbers_as_csv())
@@ -64,10 +71,11 @@ class MobilySMS(object):
 
 
 class MobilyFormattedSMS(MobilySMS):
-    def __init__(self, auth, numbers, sender, msg, date_send=0, time_send=0, delete_key=None, msg_id=None,
-                 domain_name=None, application_type=24):
-        super(MobilyFormattedSMS, self).__init__(auth, numbers, sender, msg, date_send, time_send, delete_key, msg_id,
+    def __init__(self, auth, numbers, sender, msg, delete_key=None, msg_id=None,
+                 domain_name=None, application_type='24'):
+        super(MobilyFormattedSMS, self).__init__(auth, numbers, sender, msg, delete_key, msg_id,
                                                  domain_name, application_type)
+        self.api_method_name = 'msgSendWK'
         self.variable_dict = {}
 
     def generate_msg_key(self):
