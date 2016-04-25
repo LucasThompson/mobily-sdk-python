@@ -31,4 +31,4 @@ class MobilyAccount(object):
         # balance api method wrapper
         request_handler = MobilyApiJsonRequestHandler(self.auth)
         request_handler.set_api_method('balance')
-        return request_handler.handle()
+        return request_handler.handle().get('balance')
