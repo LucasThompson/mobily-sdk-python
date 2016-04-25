@@ -28,6 +28,7 @@ balance = account.check_balance()
 print '{0} credits available, total {1}'.format(balance['current'], balance['total'])
 ```
 
+
 **_Configuring Senders_**
 
 Check the activation status of all previously requested senders:
@@ -59,6 +60,7 @@ sender.activate_mobile_number_license(sender_id, 'CODE_FROM_SMS')
 if sender.is_mobile_number_license_active(sender_id):
     print 'Activated!'
 ```
+
 
 **_Sending SMS messages_**
 
