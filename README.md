@@ -1,7 +1,7 @@
 # mobily-python
 
 ## Examples
-*All examples assume you have a mobily.ws account with an available balance *
+* All examples assume you have a mobily.ws account with an available balance *
 
 Request to change account password:
 
