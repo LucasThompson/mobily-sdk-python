@@ -95,9 +95,9 @@ class MobilyApiJsonRequestHandler(object):
             self.params.update({key: value})
 
     def get_request_data(self):
-        self.add_auth(self.auth)
         if len(self.params) > 0:
             self.json_dict['Data'].update({'Params': self.params})
+        self.add_auth(self.auth)
         return json.dumps(self.json_dict)
 
     def handle(self):
