@@ -2,7 +2,7 @@
 import unittest
 from mobily.utilities import MobilyApiRequest
 from mobily.utilities import MobilyApiJsonRequestHandler
-from mobily.utilities import MobilyAuth
+from mobily.utilities import MobilyApiAuth
 from mobily.utilities import MobilyApiResponse
 from mobily.utilities import MobilyApiError
 
@@ -11,7 +11,7 @@ class TestMobilyApiRequestHandlersQueryBuilding(unittest.TestCase):
 
     def test_json_building(self):
         expected_json = '{"Data": {"Method": "balance", "Auth": {"mobile": "test", "password": "test"}}}'
-        request = MobilyApiJsonRequestHandler(MobilyAuth('test', 'test'))
+        request = MobilyApiJsonRequestHandler(MobilyApiAuth('test', 'test'))
         request.set_api_method('balance')
         self.assertEqual(expected_json, request.get_request_data())
 

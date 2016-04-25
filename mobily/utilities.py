@@ -24,7 +24,7 @@ def u(s):
         return s
 
 
-class MobilyAuth(object):
+class MobilyApiAuth(object):
     def __init__(self, mobile_number, password):
         self.mobile_number = mobile_number
         self.password = password
@@ -86,7 +86,7 @@ class MobilyApiJsonRequestHandler(object):
         self.auth = auth
 
     def add_auth(self, auth):
-        if isinstance(auth, MobilyAuth):
+        if isinstance(auth, MobilyApiAuth):
             self.json_dict['Data'].update({'Auth': {'mobile': auth.mobile_number, 'password': auth.password}})
 
     def set_api_method(self, method_name):
