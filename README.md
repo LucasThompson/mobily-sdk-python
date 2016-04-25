@@ -3,7 +3,7 @@
 ## Examples
 All examples assume you have a mobily.ws account with an available balance
 
-*Managing your mobily.ws account*
+**_Managing your mobily.ws account_**
 
 Request to change account password:
 
@@ -28,7 +28,7 @@ balance = account.check_balance()
 print '{0} credits available, total {1}'.format(balance['current'], balance['total'])
 ```
 
-*Configuring Senders*
+**_Configuring Senders_**
 
 Check the activation status of all previously requested senders:
 
@@ -60,7 +60,7 @@ if sender.is_mobile_number_license_active(sender_id):
     print 'Activated!'
 ```
 
-*Sending SMS messages*
+**_Sending SMS messages_**
 
 
 
