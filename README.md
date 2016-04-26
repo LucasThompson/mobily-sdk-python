@@ -1,7 +1,7 @@
 # mobily-python
 
 ## Getting Started
-* There is a small script, `sample.py`, which demonstrates how to import parts of the library and use them,
+There is a small script, `sample.py`, which demonstrates how to import parts of the library and use them,
 run it from the terminal with:
 
 ```bash
