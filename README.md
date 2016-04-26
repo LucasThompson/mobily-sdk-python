@@ -64,15 +64,65 @@ if sender.is_mobile_number_license_active(sender_id):
 
 **_Sending SMS messages_**
 
+Check the Mobily.ws SMS sending service is available:
+
+```python
+from mobily.sms import MobilySMS
+if MobilySMS.can_send():
+    print 'Service is available!'
+```
+
 Send SMS, immediately, saying 'Hello, World' to 966444444444, from 'YOUR MOM':
 
 ```python
 from mobily.utilities import MobilyApiAuth
 from mobily.sms import MobilySMS
 sms = MobilySMS(MobilyApiAuth('966555555555', 'demo'))
-
+sms.add_number('966444444444')
+sms.sender = 'YOUR MOM'
+sms.msg = 'Hello, World!'
+sms.send()
 ```
 
+As above, but using constructor, and sending to multiple numbers:
+
+```python
+auth = MobilyApiAuth('966555555555', 'demo')
+sms = MobilySMS(auth, ['96202258669', '967965811686'], 'YOUR MOM', 'Hello, World!')
+sms.send()
+```
+
+As above, but schedule to send on 25th December 2020 at midday:
+
+```python
+auth = MobilyApiAuth('966555555555', 'demo')
+sms = MobilySMS(auth, ['96202258669', '967965811686'], 'YOUR MOM', 'Hello, World!')
+sms.schedule_to_send_on(25, 12, 2017, 12, 0, 0)
+sms.delete_key('666')
+sms.send()
+```
+
+Delete the above scheduled SMS before it sends:
+
+```python
+sms.delete()
+```
+
+Send a bulk SMS to multiple people, letting them know about their subscription, with personalised messages just for them:
+
+```python
+from mobily.utilities import MobilyApiAuth
+from mobily.sms import MobilyFormattedSMS
+
+auth = MobilyApiAuth('966555555555', 'demo')
+msg = 'Hi (1), your subscription will end on (2).'
+sms = MobilyFormattedSMS(auth, ['966505555555', '966504444444'], 'NEW SMS', msg)
+sms.add_variable_for_number('966505555555', '(1)', 'Ahmad')
+sms.add_variable_for_number('966505555555', '(2)', '31/12/2013')
+sms.add_variable_for_number('966504444444', '(1)', 'Mohamed')
+sms.add_variable_for_number('966504444444', '(2)', '01/11/2013')
+sms.send()
+```
 
 ## Tests
 Tests for the core logic behind the utilities can be run from the terminal with:
