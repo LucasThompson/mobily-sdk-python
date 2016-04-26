@@ -1,7 +1,7 @@
 # mobily-python
 
 ## Examples
-All examples assume you have a mobily.ws account with an available balance
+*All examples assume you have a mobily.ws account with an available balance*
 
 **_Managing your mobily.ws account_**
 
@@ -38,9 +38,9 @@ from mobily.utilities import MobilyApiAuth
 from mobily.sender import MobilySender
 sender = MobilySender(MobilyApiAuth('966555555555', 'demo'))
 senders_by_status = sender.get_activation_status_for_all_senders()
-print 'Active Senders:', [sender for sender in d['active']]
-print 'Pending Senders:', [sender for sender in d['pending']]
-print 'Inactive Senders:', [sender for sender in d['notActive']]
+print 'Active Senders:', [sender for sender in senders_by_status['active']]
+print 'Pending Senders:', [sender for sender in senders_by_status['pending']]
+print 'Inactive Senders:', [sender for sender in senders_by_status['notActive']]
 ```
 
 Request to add a new sender word name:
@@ -64,6 +64,14 @@ if sender.is_mobile_number_license_active(sender_id):
 
 **_Sending SMS messages_**
 
+Send SMS, immediately, saying 'Hello, World' to 966444444444, from 'YOUR MOM':
+
+```python
+from mobily.utilities import MobilyApiAuth
+from mobily.sms import MobilySMS
+sms = MobilySMS(MobilyApiAuth('966555555555', 'demo'))
+
+```
 
 
 ## Tests
