@@ -105,7 +105,7 @@ As above, but schedule to send on 25th December 2020 at midday:
 ```python
 auth = MobilyApiAuth('966555555555', 'demo')
 sms = MobilySMS(auth, ['96202258669', '967965811686'], 'YOUR MOM', 'Hello, World!')
-sms.schedule_to_send_on(25, 12, 2017, 12, 0, 0)
+sms.schedule_to_send_on(25, 12, 2020, 12, 0, 0)
 sms.delete_key = '666'
 sms.send()
 ```
