@@ -38,9 +38,9 @@ from mobily.utilities import MobilyApiAuth
 from mobily.sender import MobilySender
 sender = MobilySender(MobilyApiAuth('966555555555', 'demo'))
 senders_by_status = sender.get_activation_status_for_all_senders()
-print 'Active Senders:', [sender for sender in senders_by_status['active']]
-print 'Pending Senders:', [sender for sender in senders_by_status['pending']]
-print 'Inactive Senders:', [sender for sender in senders_by_status['notActive']]
+print 'Active Senders:', [alpha_sender for alpha_sender in senders_by_status['active']]
+print 'Pending Senders:', [alpha_sender for alpha_sender in senders_by_status['pending']]
+print 'Inactive Senders:', [alpha_sender for alpha_sender in senders_by_status['notActive']]
 ```
 
 Request to add a new sender word name:
