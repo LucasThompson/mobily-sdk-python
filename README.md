@@ -137,8 +137,8 @@ from mobily.account import MobilyAccount
 
 account = MobilyAccount(MobilyApiAuth('DOESNT_EXIST', 'demo'))
 try:
-    response = request_handler.handle()
-except MobilyApiError => error:
+    response = account.check_balance()
+except MobilyApiError as error:
     print error.msg_english, error.msg_arabic
 ```
 
