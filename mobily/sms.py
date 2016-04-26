@@ -80,7 +80,7 @@ class MobilySMS(object):
 
 
 class MobilyFormattedSMS(MobilySMS):
-    def __init__(self, auth, numbers, sender, msg, delete_key=None, msg_id=None,
+    def __init__(self, auth, numbers=None, sender='', msg='', delete_key=None, msg_id=None,
                  domain_name=None, application_type='24'):
         super(MobilyFormattedSMS, self).__init__(auth, numbers, sender, msg, delete_key, msg_id,
                                                  domain_name, application_type)

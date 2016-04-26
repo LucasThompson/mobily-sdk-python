@@ -46,4 +46,4 @@ class MobilySender(object):
     def get_activation_status_for_all_senders(self):
         request_handler = MobilyApiJsonRequestHandler(self.auth)
         request_handler.set_api_method('checkAlphasSender')
-        return request_handler.handle()
+        return request_handler.handle().data
