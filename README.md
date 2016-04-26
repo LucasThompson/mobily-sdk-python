@@ -124,6 +124,25 @@ sms.add_variable_for_number('966504444444', '(2)', '01/11/2013')
 sms.send()
 ```
 
+
+**_Handling errors_**
+
+When a request has been unsuccessful, whether due to a known error (insufficient balance), or otherwise, an MobilyApiError is raised.
+
+This error contains a message in English and Arabic.
+
+```python
+from mobily.utilities import MobilyApiAuth, MobilyApiError
+from mobily.account import MobilyAccount
+
+account = MobilyAccount(MobilyApiAuth('DOESNT_EXIST', 'demo'))
+try:
+    response = request_handler.handle()
+except MobilyApiError => error:
+    print error.msg_english, error.msg_arabic
+```
+
+
 ## Tests
 Tests for the core logic behind the utilities can be run from the terminal with:
 ```bash
