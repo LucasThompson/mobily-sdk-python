@@ -1,5 +1,13 @@
 # mobily-python
 
+## Getting Started
+* There is a small script, `sample.py`, which demonstrates how to import parts of the library and use them,
+run it from the terminal with:
+
+```bash
+python sample.py
+```
+
 ## Examples
 *All examples assume you have a mobily.ws account with an available balance*
 
