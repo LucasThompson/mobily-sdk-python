@@ -80,14 +80,14 @@ if MobilySMS.can_send():
     print 'Service is available!'
 ```
 
-Send SMS, immediately, saying 'Hello, World' to 966444444444, from 'YOUR MOM':
+Send SMS, immediately, saying 'Hello, World' to 966444444444, from 'PYTHON':
 
 ```python
 from mobily.utilities import MobilyApiAuth
 from mobily.sms import MobilySMS
 sms = MobilySMS(MobilyApiAuth('966555555555', 'demo'))
 sms.add_number('966444444444')
-sms.sender = 'YOUR MOM'
+sms.sender = 'PYTHON'
 sms.msg = 'Hello, World!'
 sms.send()
 ```
@@ -96,7 +96,7 @@ As above, but using constructor, and sending to multiple numbers:
 
 ```python
 auth = MobilyApiAuth('966555555555', 'demo')
-sms = MobilySMS(auth, ['96202258669', '967965811686'], 'YOUR MOM', 'Hello, World!')
+sms = MobilySMS(auth, ['96202258669', '967965811686'], 'PYTHON', 'Hello, World!')
 sms.send()
 ```
 
@@ -104,7 +104,7 @@ As above, but schedule to send on 25th December 2020 at midday:
 
 ```python
 auth = MobilyApiAuth('966555555555', 'demo')
-sms = MobilySMS(auth, ['96202258669', '967965811686'], 'YOUR MOM', 'Hello, World!')
+sms = MobilySMS(auth, ['96202258669', '967965811686'], 'PYTHON', 'Hello, World!')
 sms.schedule_to_send_on(25, 12, 2020, 12, 0, 0)
 sms.delete_key = '666'
 sms.send()
