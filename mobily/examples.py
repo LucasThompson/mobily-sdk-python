@@ -39,7 +39,7 @@ def example_06_send_sms(mobile, password, recipient_mobile):
     sms = MobilySMS(MobilyApiAuth(mobile, password))
     sms.add_number(recipient_mobile)
     sms.sender = 'PYTHON'
-    sms.msg = 'Testing تجريب ^&**\nFrom Python'
+    sms.msg = 'Testing تجريب ^&**\nFrom Python!'
     sms.send()
 
 
@@ -47,7 +47,7 @@ def example_07_scheduled_sms(mobile, password, recipient_mobile):
     sms = MobilySMS(MobilyApiAuth(mobile, password))
     sms.add_number(recipient_mobile)
     sms.sender = 'PYTHON'
-    sms.msg = 'Testing تجريب ^&**\nFrom Python'
+    sms.msg = 'Testing Scheduling تجريب ^&**\nFrom Python!'
     sms.schedule_to_send_on(25, 12, 2020, 12, 0, 0)
     sms.delete_key = '666'
     sms.send()
@@ -63,10 +63,10 @@ def example_09_send_formatted_sms(mobile, password, recipient_one, recipient_two
     auth = MobilyApiAuth(mobile, password)
     msg = 'Hi (1), your subscription will end on (2).'
     sms = MobilyFormattedSMS(auth, [recipient_one, recipient_two], 'PYTHON', msg)
-    sms.add_variable_for_number(recipient_one, '(1)', 'Ahmad')
-    sms.add_variable_for_number(recipient_one, '(2)', '31/12/2013')
-    sms.add_variable_for_number(recipient_two, '(1)', 'Mohamed')
-    sms.add_variable_for_number(recipient_two, '(2)', '01/11/2013')
+    sms.add_variable_for_number(recipient_one, '(1)', 'Martin')
+    sms.add_variable_for_number(recipient_one, '(2)', '31/12/2017')
+    sms.add_variable_for_number(recipient_two, '(1)', 'Tim')
+    sms.add_variable_for_number(recipient_two, '(2)', '01/11/2020')
     sms.send()
 
 
@@ -74,10 +74,10 @@ def example_10_send_scheduled_formatted_sms(mobile, password, recipient_one, rec
     auth = MobilyApiAuth(mobile, password)
     msg = 'Hi (1), your subscription will end on (2).'
     sms = MobilyFormattedSMS(auth, [recipient_one, recipient_two], 'PYTHON', msg)
-    sms.add_variable_for_number(recipient_one, '(1)', 'Ahmad')
-    sms.add_variable_for_number(recipient_one, '(2)', '31/12/2013')
-    sms.add_variable_for_number(recipient_two, '(1)', 'Mohamed')
-    sms.add_variable_for_number(recipient_two, '(2)', '01/11/2013')
+    sms.add_variable_for_number(recipient_one, '(1)', 'Grace')
+    sms.add_variable_for_number(recipient_one, '(2)', '31/11/2019')
+    sms.add_variable_for_number(recipient_two, '(1)', 'Mo')
+    sms.add_variable_for_number(recipient_two, '(2)', '03/10/2017')
     sms.delete_key = '666'
     sms.schedule_to_send_on(25, 12, 2020, 12, 0, 0)
     sms.send()
